@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const fetchWeatherData = createAsyncThunk(
   "weather/fetchWeather",
-  async (e) => {
+  async (e, { rejectWithValue }) => {
     if (!e) return;
     try {
       const response = await axios.get(
@@ -12,7 +12,7 @@ export const fetchWeatherData = createAsyncThunk(
       console.log(response);
       return response.data;
     } catch (err) {
-      console.error(err);
+      return rejectWithValue(true);
     }
   },
 );
@@ -20,11 +20,12 @@ export const fetchWeatherData = createAsyncThunk(
 const initialState = {
   location: null,
   data: null,
+  status: "idle",
+  error: false,
 };
 
 export const ApiDataSlice = createSlice({
   name: "apiData",
-  status: "idle",
   initialState,
   reducers: {
     setLocation: (state, action) => {
@@ -42,10 +43,12 @@ export const ApiDataSlice = createSlice({
       .addCase(fetchWeatherData.fulfilled, (state, action) => {
         state.status = "succeded";
         state.data = action.payload;
+        state.error = false;
       })
       .addCase(fetchWeatherData.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload || true;
+        state.data = null;
       });
   },
 });

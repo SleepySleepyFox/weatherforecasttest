@@ -1,23 +1,39 @@
-import { Bar, BarChart, ResponsiveContainer } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  YAxis,
+} from "recharts";
 import "./Chart.css";
+import { useSelector } from "react-redux";
+
 export default function Chart() {
-  const data = [
-    {
-      temp: "20",
-      date: "03.15",
-    },
-    {
-      temp: "27",
-      date: "03.16",
-    },
-  ];
-  return (
-    <div className="container">
-      <ResponsiveContainer height="100%" width="100%">
-        <BarChart data={data} height={100} width={200}>
-          <Bar dataKey="temp" fill="#ffdd80" aria-busy></Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
+  const data = useSelector((state) => state.apiData.data);
+  const error = useSelector((state) => state.apiData.error);
+  console.log("error: ", error);
+  console.log("data: ", data);
+
+  const render = () => {
+    if ((data === undefined || data === null) && !error) {
+      return <></>;
+    }
+    if (data !== undefined && !error) {
+      return (
+        <div className="container">
+          <ResponsiveContainer height="100%" width="100%">
+            <BarChart data={data.list} height={100} width={200}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <YAxis />
+              <Bar dataKey="main.temp" fill="#ffdd80" aria-busy></Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      );
+    }
+    if (data == undefined && error) {
+      return <>Nothing Here</>;
+    }
+  };
+  return <div>{render()}</div>;
 }
