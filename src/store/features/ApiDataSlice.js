@@ -37,9 +37,6 @@ export const ApiDataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchWeatherData.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(fetchWeatherData.fulfilled, (state, action) => {
         state.status = "succeded";
         state.data = action.payload;
