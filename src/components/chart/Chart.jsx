@@ -32,7 +32,7 @@ export default function Chart() {
       );
     }
     if (data == undefined && error) {
-      return <>Nothing Here</>;
+      return <>City Not Found</>;
     }
   };
   return <div>{render()}</div>;
