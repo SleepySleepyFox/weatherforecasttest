@@ -5,9 +5,6 @@ import Search from "./components/search/Search";
 import { useEffect } from "react";
 import { fetchWeatherData } from "./store/features/ApiDataSlice";
 function App() {
-  // TODO:
-  // - Create charts
-  // - Create fallback if city not found
   const selector = useSelector((state) => state.apiData.location);
   const dispatch = useDispatch();
 
